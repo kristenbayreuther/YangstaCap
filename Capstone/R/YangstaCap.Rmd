@@ -1,0 +1,105 @@
+---
+title: What is the correlation between amount spent on advertising and profits gained
+  by four major airlines?
+output:
+  html_notebook: default
+  pdf_document: default
+---
+  This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook that will explore the possible correlation between the advertising budgets and profits gained by four United States-based airlines. Finding this correlation is extremely useful to airlines to maximize their profit and avoid over-spending.   
+  After researching which airlines were most frequently used, the names of the airlines were recorded into tables. The tables include the four airlines (American Airlines, Delta Airlines, Southwest Airlines, and United Airlines) and the advertising budgets of each airline for the years found. Each airline's profits for the ten year span chosen were also turned into a table.
+```{r}
+avp1= fread(file.choose(),sep = "," )
+avp2= fread(file.choose(),sep = "," )
+avp3= fread(file.choose(),sep = "," )
+avp4= fread(file.choose(),sep = "," )
+
+```
+  In addition to viewing the profit and advertisement cost of each airline separately, a fifth table was created to view the average amount spent on advertising among all four airlines as well as the average profit.
+```{r}
+aap = fread(file.choose(),sep = ",")
+```
+  After creating tables to view each company's annual report of their profits and advertising budgets, both variables were plotted over a ten year span as well.
+```{r}
+plot(avp1$Year,avp1$Profit, type = "l",cex=.5, main = "American Airlines Profit over Ten Years", xlab ="Year", ylab ="Profit (in tens of millions)" )
+```
+This line graph shows the annual profits earned by American Airlines over the course of 10 years. As shown by the graph above, there is a period of 5 years (2008-2013) where the profit is negative, meaning money is being lost instead of gained. American Airlines was able to transition their profit from earning 200 million a year in 2006 to earning 2,000 million a year in 2016.   
+
+```{r}
+plot(avp2$Year,avp2$Profit, type = "l",cex=.5, main = "Delta Airlines Profit over Ten Years", xlab ="Year", ylab ="Profit (in tens of millions)" )
+```
+This line graph shows the annual profits earned by Delta Airlines over the course of 10 years. Delta Airlines starts and remains in debt for a period of 3 years (2006-2009) but they are able to consistently earn a profit in the following years. Delta Airlines was able to transition their profit from losing 5,000 million a year in 2006 to earning 5,000 million a year in 2016. 
+
+```{r}
+plot(avp3$Year,avp3$Profit, type = "l",cex=.5,main = "Southwest Airlines Profit over Ten Years", xlab ="Year", ylab ="Profit (in tens of millions)" ) 
+```
+This line graph shows the annual profits earned by Southwest Airlines over the course of 10 years. Unlike the other airlines being compared, they are able to consistently profit during this period instead of falling in debt for a period of years. Southwest Airlines was able to transition their profit from earning around 500 million a year in 2006 to earning 2,500 million a year in 2016. 
+
+```{r}
+plot(avp4$Year,avp4$Profit, type = "l",cex=.5,main = "United Airlines Profit over Ten Years", xlab ="Year", ylab ="Profit (in tens of millions)" ) 
+```
+This line graph shows the annual profits earned by United Airlines over the course of 10 years. United Airlines starts in debt similarily to the other airlines but is able to keep increasing their profit in the following years. United Airlines able to transition their profit from losing -2,500 million in 2006 to gaining 750 million in 2016. 
+
+```{r}
+plot(avp1$Year,avp1$Advertising, type = "l",cex=.5, main = "American Airlines Advertising Costs over Ten Years", xlab ="Year", ylab ="Advertising Cost (in millions)" )
+```
+This line graph shows American Airline's advertising budget over the course of 10 years. It remains relatively constant for the first 7 years (2006-2013) but has a huge decrease in 2014, dropping by nearly 100 million. Their budget decreases by nearly 40 million during this period of time. 
+
+```{r}
+plot(avp2$Year,avp2$Advertising, type = "l",cex=.5, main = "Delta Airlines Advertising Costs over Ten Years", xlab ="Year", ylab ="Advertising Cost (in millions)" )
+```
+This line graph shows Delta Airline's advertising budget over the course of 10 years. With the exception of a few years, there seems to be a relatively constant increase within the budget allotted. Their budget increases by nearly 150 million over this period of time.  
+
+```{r}
+plot(avp3$Year,avp3$Advertising, type = "l",cex=.5,main = "Southwest Airlines Advertising Costs over Ten Years", xlab ="Year", ylab ="Advertising Cost (in millions)" )
+```
+This line graph shows Southwest Airline's advertising budget over the course of 10 years. There is a spike in the budget in 2011 as the budget increases by around 50 million then decreases again the following year. Their budget increases by nearly 50 million over this period of time. 
+
+```{r}
+plot(avp4$Year,avp4$Advertising, type = "l",cex=.5,main = "United Airlines Advertising Costs over Ten Years", xlab ="Year", ylab ="Advertising Cost (in millions)" )
+```
+This line graph shows United Airlline's advertising budget over the course of 10 years. There seems to be a relatively constant increase to the budget with the exception of a few years (2009). Their budget increases by nearly 200 million over this period of time. 
+
+```{r}
+plot(alldata$`Advertising (millions)`,alldata$`Profit (tens of millions)`, type = "p",cex=.5, main = "Advertising Costs vs. Profits for all Airlines", xlab ="Average Advertisment Cost (in millions of dollars)", ylab ="Average Profit (in tens of millions of dollars)" )
+```
+  After plotting both variables for each airline, a linear regression model was created for the advertisement cost vs. the profit of all the airlines in an attempt to prove correlation between advertising budget and profit.
+ 
+```{r}
+avp1$label = "American"
+avp2$label= "Delta"
+avp3$label = "Southwest"
+avp4$label = "United"
+
+alldata=rbind(avp1, avp2,avp3,avp4, fill = TRUE)
+model2 = lm(alldata$`Profit (tens of millions)`~alldata$`Advertising (millions)`)
+summary(model2)
+```
+ 
+  It is clear now that there is a weak positive correlation between an airline's advertising budget and profit as shown by the linear model's positive coefficient and R-squared value of 0.07105 (0 being no correlation and 1 being a strong correlation). It was surprising to discover that most companies experienced major losses of billions of dollars regardless of advertising efforts. If it was necessary, this test could be redone with additional resources such as ticket prices, and passengers carried to assure that the advertisements increased popularity to trigger a growth of profit instead of a rise in ticket prices with less passengers.
+  
+  
+# Works Cited:
+https://skift.com/2016/03/24/the-u-s-set-a-new-record-for-airline-passengers-in-2015/
+
+https://www.statista.com/statistics/308960/southwest-airlines-advertising-spending-usa/
+
+https://www.statista.com/statistics/480867/american-airlines-ad-spend-usa/
+
+https://americanairlines.gcs-web.com/sec-filings?items_per_page=10&order=field_nir_sec_form&sort=asc&page=1
+
+https://www.sec.gov/Archives/edgar/data/4515/000000620114000004/aagaa10k-20131231.htm
+
+http://www.oliverwyman.com/content/dam/oliver-wyman/global/en/2016/jan/oliver-wyman-airline-economic-analysis-2015-2016.pdf
+
+https://www.statista.com/statistics/220809/operating-revenue-of-delta-air-lines/
+
+http://investors.southwest.com/~/media/Files/S/Southwest-IR/documents/company-reports-ar/ar-2006.pdf
+
+http://ir.united.com/financial-performance/sec-filings
+
+http://ir.united.com/financial-performance/sec-filings
+
+http://investors.southwest.com/financials/company-reports/annual-reports
+
+https://americanairlines.gcs-web.com/financial-results/financial-aal 
+
